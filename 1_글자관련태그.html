@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<!--HTML문서 형식 선언 :이 문서는 HTML문서다! 알리는 의미-->
+<html lang="en">
+<!--문서 전체가 HTML요소로 감싸져 있어야함-->
+<head>
+    <!--
+        이 문서의 머리 부분
+        해당 문서의 정보, 제목, 설명, 달려있는 링크등을 선언하는 태그
+    -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이건 제목이당?</title><!--title : 문서의 제목-->
+</head>
+<body>
+    <!--
+        문서의 본문 화면에 출력해서 보여줄 정보, 내용물을 작성하는 영역
+    -->
+    <!--
+        System.out.println("출력하고 싶은 내용")
+    -->
+    동물관리 프로그램입니다. <br/>
+    1. 동물추가 <br />
+    2. 전체동물조회 <br/>
+    <!-- 줄바꿈 요소 -->
+    <!--System.out.println("----------------------------")-->
+    <hr /> <!--hr : 가로로 수평선, 구분선을 긋는 태그-->
+    
+    <!--
+        2000 ~ 2010년대 초
+        Trident, Gecko,     Webkit,  Presto
+        I.E,     Firefox,  Safari,  Opera
+        Blink   - Chrome, Edge, Opera, Brave
+        WebKit  - Safari, IOS의 모든 브라우저들
+        Gecko   - Firefox
+
+        1단계 : Parsing
+        => HTML문자열을 읽어서 DOM Tree를 만든다.
+        CSS도 동시에 파싱해서 CSSOM Tree를 만든다.
+        2단계 : RenderTree 구축
+            DOM + CSSOM을 합쳐서 RenderTree를 만드는데 화면에 보여질것만 모아둔 트리
+        3단계 : Layout
+            각 요소들이 화면에 어디에 어느정도 크기 놓일지 계산
+        4단계 : Painting
+            계산된 위치에 실제 픽셀을 칠함
+    -->
+
+    <!--h태그(h1 ~ h6) : 제목을 작성할 때 사용하는 태그-->
+    <h1>h1제목</h1>
+    <h2>h2제목</h2>
+    <h3>h3제목</h3>
+    <h4>h4제목</h4>
+    <h5>h5제목</h5>
+    <h6>h6제목</h6>
+    <h1>이렇게 쓸 수 있음</h1>
+    <!--h1은 문서당 딱 한개만 작성하자!-->
+
+    <hr />
+
+    <h3>문단을 나누는 태그</h3>
+
+    <p>
+        문단을 나눈는 태그로는 p태그와 pre태그가 있음 <br>
+        p태그의 경우 개행을 하더라도 줄바꿈이 일어나지 않음
+    </p>
+    <p>
+        이런식으로 p태그를 하나 더 작성함!
+    </p>
+
+    <pre>
+        pre의 경우 브라우저에 자체 스타일이 부여되어있음
+        개행도 하면 개행이 잘됨!
+    </pre>
+
+    <hr />
+
+    <h3>소소쟁이들</h3>
+
+    텍스트를 적는데 덩그러니 이렇게 적지 않음 <br>
+
+    <b>b: 글자를 굵게(시각적인 강조)</b>
+    <br><br>
+    <strong>strong : 글자를 굵게(의미적 강조)</strong>
+    <br><br>
+    <i>i : 글자를 기울여서 표기(시각적인 기울임)</i>
+    <br><br>
+    <em>em : 글자를 기울여서 표기(의미적인 기울임)</em>
+    <br><br>
+    <s style="background: yellow">s : 글자에 취소선을 표현할 때 사용함</s>
+    <br><br>
+    <mark>mark : 형관펜 효과</mark>
+    <br><br>
+    <small>작게 표시</small>
+    <big>크게표시</big>
+    <br><br>
+    sub : 쓰다가<sub>아래첨자</sub>
+    sup : 쓰다가<sup>위첨자</sup>
+    
+
+
+
+
+
+
+
+
+
+</body>
+</html>
+
+
+
+
+
+
