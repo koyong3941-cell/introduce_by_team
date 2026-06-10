@@ -10,7 +10,6 @@ function App() {
       <Header />
       <main
         style={{
-          paddingTop: "72px", // ← 헤더 높이만큼
           minHeight: "100vh",
         }}
       >
