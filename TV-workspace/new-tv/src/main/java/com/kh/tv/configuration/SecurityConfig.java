@@ -30,7 +30,7 @@ public class SecurityConfig {
 	//private final JwtFilter jwtFilter;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		System.out.println("저주받음");
 		return http.formLogin(AbstractHttpConfigurer::disable)
 				   .httpBasic(AbstractHttpConfigurer::disable)

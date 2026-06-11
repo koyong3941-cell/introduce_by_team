@@ -24,7 +24,7 @@ public class MemberService {
 	@Transactional
 	public void signUp(MemberDto member) {
 		
-		CountById(member.getMemberId());
+		countById(member.getMemberId());
 		
 		Member tvMember = Member.builder()
 								.memberId(member.getMemberId())
@@ -33,9 +33,9 @@ public class MemberService {
 								.role("ROLE_USER")
 								.build();
 		
-		int result = memberMapper.SignUp(tvMember);
+		//Zint result = memberMapper.signUp(tvMember);
 	
-		if(result < 1) {
+		if(memberMapper.signUp(tvMember) < 1) {
 			throw new FailSignUpException("관리자를 찾아주세요.");
 		}
 		
@@ -43,8 +43,8 @@ public class MemberService {
 	}
 	
 	
-	private void CountById(String memberId) {
-		 if(memberMapper.CountById(memberId) > 0) {
+	private void countById(String memberId) {
+		 if(memberMapper.countById(memberId) > 0) {
 			 throw new CountDuplicationException("중복된 아이디입니다.");
 		 }
 	}

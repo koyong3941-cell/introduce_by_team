@@ -16,7 +16,8 @@ const SignUp = () => {
     setMemberName(e.target.value);
   };
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     axios
       .post("http://localhost/api/members", {
         memberId,
