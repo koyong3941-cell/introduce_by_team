@@ -13,6 +13,7 @@ import {
   PagerButton,
   Loading,
 } from "./styles/Board.styles";
+import AnimalName from "../../components/AnimalName";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -50,10 +51,11 @@ const BoardList = () => {
       ) : (
         <List>
           {boards.map((b) => (
-            <Item key={b.boardNo}>
+            <Item key={b.boardNo} onClick={() => navi(`/boards/${b.boardNo}`)}>
               <ItemTitle>{b.boardTitle}</ItemTitle>
               <ItemMeta>
-                ㅇㅇ • 조회수 : {b.boardCount} • {b.regDate}
+                <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}
+                {b.regDate}
               </ItemMeta>
             </Item>
           ))}
