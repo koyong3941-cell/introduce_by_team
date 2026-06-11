@@ -1,0 +1,34 @@
+package com.kh.tv.member.controller;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.kh.tv.member.model.dto.MemberDto;
+import com.kh.tv.member.model.service.MemberService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@RestController
+@RequestMapping("/api/members")
+@RequiredArgsConstructor
+public class MemberController {
+
+	private final MemberService memberService;
+	
+
+
+
+
+	@PostMapping
+	public ResponseEntity<?> signUp(@RequestBody @Valid MemberDto member){
+		memberService.signUp(member);
+		log.info("살려줘");
+		return ResponseEntity.status(201).build();
+	}
+}
