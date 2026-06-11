@@ -10,8 +10,8 @@ import com.kh.tv.member.model.vo.Member;
 public interface MemberMapper {
 
 	@Insert("INSERT INTO TV_MEMBER(MEMBER_ID, MEMBER_PWD, MEMBER_NAME, ROLE) VALUES (#{memberId}, #{memberPwd}, #{memberName}, #{role})")
-	int SignUp(Member member);
+	int signUp(Member member);
 	
 	@Select("SELECT COUNT(*) FROM TV_MEMBER WHERE MEMBER_ID = #{memberId}")
-	int CountById(String memberId);
+	int countById(String memberId);
 }
