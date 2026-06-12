@@ -51,11 +51,10 @@ const Board = () => {
     try {
       if (isEdit) {
         await api.patch(`/boards/${boardNo}`, fd);
-        navi(`/board/${boardNo}`);
       } else {
         await api.post("/boards", fd);
-        navi("/board");
       }
+      navi("/");
     } catch (err) {
       setStatus("게시글 작성 실패");
       console.log(err.response);

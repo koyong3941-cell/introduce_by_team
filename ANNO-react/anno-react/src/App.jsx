@@ -7,6 +7,7 @@ import Header from "./header/Header";
 import Footer from "./footer/Footer";
 import Board from "./board/Board";
 import { Route, Routes } from "react-router-dom";
+import Login from "./login/Login";
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Header />
 
       <Routes>
+        <Route path="/login" element={<Login />} />
         <Route path="/board" element={<Board />} />
       </Routes>
       <Footer />
