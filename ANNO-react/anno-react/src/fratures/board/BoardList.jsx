@@ -24,11 +24,14 @@ const BoardList = () => {
   const [loading, isLoading] = useState(true);
 
   useEffect(() => {
+    isLoading(true);
+
     axios
       .get("http://localhost/api/boards", { params: { page } })
       .then((result) => {
-        // console.log(result);
-        setBoards([...result.data]);
+        console.log(result);
+        setBoards([...result.data.data]);
+        console.log("보드 업데이트 성공");
       })
       .catch(() => {
         setBoards([]);
@@ -52,7 +55,9 @@ const BoardList = () => {
         <List>
           {boards.map((b) => (
             <Item key={b.boardNo} onClick={() => navi(`/boards/${b.boardNo}`)}>
-              <ItemTitle>{b.boardTitle}</ItemTitle>
+              <ItemTitle>
+                [{b.categoryNo}] {b.boardTitle}
+              </ItemTitle>
               <ItemMeta>
                 <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}
                 {b.regDate}
@@ -71,7 +76,7 @@ const BoardList = () => {
         <span>{page + 1} 페이지</span>
         <PagerButton
           onClick={() => setPage((p) => p + 1)}
-          disabled={loading || boards.length < 3}
+          disabled={loading || boards.length < 10}
         >
           다음
         </PagerButton>

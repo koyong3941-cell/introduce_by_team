@@ -22,6 +22,7 @@ import {
 } from "./styles/Board.styles";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import AnimalName from "../../components/AnimalName";
 
 const BoardDetail = () => {
   const navi = useNavigate();
@@ -34,15 +35,26 @@ const BoardDetail = () => {
     axios
       .get(`http://localhost/api/boards/${boardNo}`)
       .then((result) => {
-        setBoard(result.data);
+        setBoard(result.data.data);
       })
       .catch(() => {
-        isLoading(false);
+        alert("상세 조회에 실패했습니다.");
       })
       .finally(() => {
         isLoading(false);
       });
   }, [boardNo]);
+
+  const onDelete = async () => {
+    if (!confirm("정말 삭제하시겠어요?")) return;
+
+    try {
+      await axios.delete(`http://localhost/api/boards/${boardNo}`);
+      navi("/boards");
+    } catch {
+      alert("삭제에 실패했습니다.");
+    }
+  };
 
   if (loading) {
     return (
@@ -60,7 +72,7 @@ const BoardDetail = () => {
   }
   return (
     <Page>
-      <DetailTitle>{board.boardTitle}</DetailTitle>
+      <DetailTitle>[카테고리] {board.boardTitle}</DetailTitle>
       <MetaRow>
         <span>
           <AnimalName regDate={board.regDate} />
@@ -80,8 +92,6 @@ const BoardDetail = () => {
         </GhostButton>
         <DangerButton onClick={onDelete}>삭제</DangerButton>
       </Actions>
-
-      <CommentSection boardNo={boardNo} />
     </Page>
   );
 };

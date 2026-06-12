@@ -1,5 +1,3 @@
-import React from "react";
-
 const traitFst = [
   "정신나간",
   "용감한",
