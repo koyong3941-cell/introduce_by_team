@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.kh.semi.board.model.dto.BoardDto;
+import com.kh.semi.board.model.dto.Category;
 import com.kh.semi.board.model.service.BoardService;
 import com.kh.semi.common.api.ApiResponse;
 
@@ -60,8 +61,11 @@ public class BoardController {
 		boardService.editByNo(board, BoardNo);
 		
 		return ResponseEntity.noContent().build();
-	
 	}
-		
-
+	
+	@GetMapping("/category")
+	public ResponseEntity<ApiResponse<List<Category>>> categoryInfo(){
+		List<Category> categoryLists = boardService.categoryInfo();
+		return ResponseEntity.ok(ApiResponse.success(categoryLists)); 
+	}
 }
