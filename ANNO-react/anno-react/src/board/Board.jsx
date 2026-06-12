@@ -6,12 +6,13 @@ import {
   GhostButton,
   Input,
   Label,
+  Message,
   Page,
   PageTitle,
   Textarea,
   TopBar,
 } from "./styles/Board.styles";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Board = () => {
   const navi = useNavigate();
@@ -23,6 +24,7 @@ const Board = () => {
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
   const [pwd, setPwd] = useState("");
+  const [loading, isLoading] = useState(false);
 
   const onSubmit = async () => {
     if (
@@ -35,13 +37,44 @@ const Board = () => {
       setStatus("모든 항목을 입력하세요");
       return;
     }
+    isLoading(true);
+    setStatus("");
+
     const fd = new FormData();
     fd.append("CategoryNo", category);
     fd.append("boardTitle", title);
     fd.append("boardContent", content);
     fd.append("userId", id);
     fd.append("userPwd", pwd);
+
+    try {
+      if (isEdit) {
+        await api.patch(`/board/${boardNo}`, fd);
+        navi(`/board/${boardNo}`);
+      } else {
+        await api.post("/board", fd);
+        navi("/board");
+      }
+    } catch (err) {
+      setStatus("게시글 작성 실패");
+      console.log(err.response);
+    } finally {
+      isLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (!isEdit) return;
+    api.get(`/board/${boardNo}`).then((result) => {
+      const data = result.data;
+      if (data) {
+        setCategory(String(data.category));
+        setTitle(data.boardTitle);
+        setContent(data.boardContent);
+        setId(data.userId);
+      }
+    });
+  }, [boardNo, isEdit]);
 
   return (
     <Page>
@@ -98,6 +131,8 @@ const Board = () => {
         <GhostButton onClick={() => navi("/board")}>취소</GhostButton>
         <Button onClick={onSubmit}>등록</Button>
       </Actions>
+
+      {status && <Message>{status}</Message>}
     </Page>
   );
 };
