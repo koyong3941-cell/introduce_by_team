@@ -13,6 +13,7 @@ import {
   TopBar,
 } from "./styles/Board.styles";
 import { useEffect, useState } from "react";
+import api from "../api/axios";
 
 const Board = () => {
   const navi = useNavigate();
@@ -49,10 +50,10 @@ const Board = () => {
 
     try {
       if (isEdit) {
-        await api.patch(`/board/${boardNo}`, fd);
+        await api.patch(`/boards/${boardNo}`, fd);
         navi(`/board/${boardNo}`);
       } else {
-        await api.post("/board", fd);
+        await api.post("/boards", fd);
         navi("/board");
       }
     } catch (err) {
