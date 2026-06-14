@@ -5,7 +5,6 @@ import Header from "./components/layout/header/Header";
 import { Routes, Route } from "react-router-dom";
 import BoardList from "./fratures/board/BoardList";
 import BoardDetail from "./fratures/board/BoardDetail";
-import Board from "./fratures/board/Board";
 
 function App() {
   return (
@@ -16,7 +15,6 @@ function App() {
         <Route path="/" element={<div style={{ height: "600px" }}></div>} />
         <Route path="/boards" element={<BoardList />} />
         <Route path="/boards/:boardNo" element={<BoardDetail />} />
-        <Route path="/board" element={<Board />} />
       </Routes>
 
       <Footer />

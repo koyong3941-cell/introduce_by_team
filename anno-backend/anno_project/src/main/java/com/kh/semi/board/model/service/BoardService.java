@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.kh.semi.board.model.dao.BoardMapper;
 import com.kh.semi.board.model.dto.BoardDto;
+import com.kh.semi.board.model.dto.Category;
 import com.kh.semi.board.model.vo.Board;
 import com.kh.semi.exception.CustomAuthenticationException;
 import com.kh.semi.exception.FailSaveException;
@@ -106,17 +107,21 @@ public class BoardService {
 	
 	// ------ 유저 ID 검증 ----
 	private void validateUser(String userId) {
-		Board board = boardMapper.findById(userId);
-		if (board == null || !board.getUserId().equals(userId)) {
+		if (!boardMapper.existsByUserId(userId)) {
 			throw new CustomAuthenticationException("아이디가 일치하지 않습니다.");
 		}
 	}
 	// ------ 유저 Pwd 검증 ----
 	private void validatePwd(BoardDto inputBoard) {
 		Board savedPwd = boardMapper.checkPwd(inputBoard);
-		if (!passwordEncoder.matches(inputBoard.getUserPwd(), savedPwd.getUserPwd())) {
+		if (savedPwd == null || !passwordEncoder.matches(inputBoard.getUserPwd(), savedPwd.getUserPwd())) {
 			throw new CustomAuthenticationException("비밀번호가 일치하지 않습니다.");
 		}
+	}
+	
+	// ------ 카테고리 조회 검증 ----	
+	public List<Category> categoryInfo() {
+		return boardMapper.categoryInfo();
 	}
 
 }

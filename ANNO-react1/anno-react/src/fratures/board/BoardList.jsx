@@ -45,7 +45,7 @@ const BoardList = () => {
     <Page>
       <TopBar>
         <PageTitle>게시판</PageTitle>
-        <Button onClick={() => navi(`/board`)}>글쓰기</Button>
+        <Button>글쓰기</Button>
       </TopBar>
       {loading ? (
         <Loading>게시글을 불러오는 중입니다...</Loading>
