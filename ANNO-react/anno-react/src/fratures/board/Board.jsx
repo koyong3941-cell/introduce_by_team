@@ -19,13 +19,30 @@ const Board = () => {
   const navi = useNavigate();
   const { boardNo } = useParams();
   const isEdit = boardNo != null;
-  const [category, setCategory] = useState("");
+  // const [category, setCategory] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [id, setId] = useState("");
   const [status, setStatus] = useState("");
   const [pwd, setPwd] = useState("");
   const [loading, isLoading] = useState(false);
+
+  const [categories, setCategories] = useState([]);
+  const [category, setCategory] = useState("");
+
+  // 카테고리 목록 불러오기
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await api.get("/boards/category");
+        setCategories(res.data.data || res.data);
+      } catch (err) {
+        console.error("카테고리 불러오기 실패", err);
+      }
+    };
+
+    fetchCategories();
+  }, []);
 
   const onSubmit = async () => {
     if (
@@ -51,10 +68,11 @@ const Board = () => {
     try {
       if (isEdit) {
         await api.patch(`/boards/${boardNo}`, fd);
+        navi(`/boards/${boardNo}`);
       } else {
         await api.post("/boards", fd);
+        navi("/boards");
       }
-      navi("/");
     } catch (err) {
       setStatus("게시글 작성 실패");
       console.log(err.response);
@@ -65,10 +83,10 @@ const Board = () => {
 
   useEffect(() => {
     if (!isEdit) return;
-    api.get(`/board/${boardNo}`).then((result) => {
-      const data = result.data;
+    api.get(`/boards/${boardNo}`).then((result) => {
+      const data = result.data?.data || result.data;
       if (data) {
-        setCategory(String(data.category));
+        setCategory(String(data.categoryNo || data.category));
         setTitle(data.boardTitle);
         setContent(data.boardContent);
         setId(data.userId);
@@ -83,11 +101,27 @@ const Board = () => {
       </TopBar>
       <Field>
         <Label>카테고리</Label>
+        {/*        
         <Input
           placeholder="카테고리 번호"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
         />
+         */}
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          style={{ width: "100%", padding: "8px", borderRadius: "4px" }}
+        >
+          <option value="" disabled>
+            카테고리를 선택하세요
+          </option>
+          {categories.map((cat) => (
+            <option key={cat.categoryNo} value={cat.categoryNo}>
+              {cat.categoryName}
+            </option>
+          ))}
+        </select>
       </Field>
 
       <Field>
@@ -128,7 +162,7 @@ const Board = () => {
       </Field>
 
       <Actions>
-        <GhostButton onClick={() => navi("/board")}>취소</GhostButton>
+        <GhostButton onClick={() => navi("/boards")}>취소</GhostButton>
         <Button onClick={onSubmit}>등록</Button>
       </Actions>
 

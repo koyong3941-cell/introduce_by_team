@@ -75,9 +75,9 @@ public interface BoardMapper {
 			UPDATE			
 				ANNO_BOARD
 			SET
-				 BOARD_TITLE
-				,BOARD_CONTENT
-				,
+				 BOARD_TITLE	= #{boardTitle}
+				,BOARD_CONTENT	= #{boardContent}
+				,CATEGORY_NO	=
 			WHERE
 				BOARD_NO = #{boardNo}
 			""")

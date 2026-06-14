@@ -45,7 +45,7 @@ const BoardList = () => {
     <Page>
       <TopBar>
         <PageTitle>게시판</PageTitle>
-        <Button onClick={() => navi(`/board`)}>글쓰기</Button>
+        <Button onClick={() => navi(`/boards/write`)}>글쓰기</Button>
       </TopBar>
       {loading ? (
         <Loading>게시글을 불러오는 중입니다...</Loading>
@@ -56,7 +56,7 @@ const BoardList = () => {
           {boards.map((b) => (
             <Item key={b.boardNo} onClick={() => navi(`/boards/${b.boardNo}`)}>
               <ItemTitle>
-                [{b.categoryNo}] {b.boardTitle}
+                [{b.categoryName}] {b.boardTitle}
               </ItemTitle>
               <ItemMeta>
                 <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}

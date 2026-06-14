@@ -57,7 +57,7 @@ public class BoardController {
 	}
 	
 	@PatchMapping("/{boardNo}")
-	public ResponseEntity<Void> editByNo(@RequestBody @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
+	public ResponseEntity<Void> editByNo(@ModelAttribute @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
 		boardService.editByNo(board, BoardNo);
 		
 		return ResponseEntity.noContent().build();

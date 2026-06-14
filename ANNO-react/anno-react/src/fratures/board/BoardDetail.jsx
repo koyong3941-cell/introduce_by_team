@@ -72,7 +72,9 @@ const BoardDetail = () => {
   }
   return (
     <Page>
-      <DetailTitle>[카테고리] {board.boardTitle}</DetailTitle>
+      <DetailTitle>
+        [{board.categoryName}] {board.boardTitle}
+      </DetailTitle>
       <MetaRow>
         <span>
           <AnimalName regDate={board.regDate} />

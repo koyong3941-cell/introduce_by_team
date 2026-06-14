@@ -16,7 +16,8 @@ function App() {
         <Route path="/" element={<div style={{ height: "600px" }}></div>} />
         <Route path="/boards" element={<BoardList />} />
         <Route path="/boards/:boardNo" element={<BoardDetail />} />
-        <Route path="/board" element={<Board />} />
+        <Route path="/boards/:boardNo/edit" element={<Board />} />
+        <Route path="/boards/write" element={<Board />} />
       </Routes>
 
       <Footer />

@@ -35,5 +35,6 @@ public class BoardDto {
     private int categoryNo;
     private String delYn;
     private LocalDateTime regDate; 
+    private String categoryName;
     
 }
