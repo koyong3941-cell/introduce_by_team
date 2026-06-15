@@ -13,10 +13,8 @@ import {
   PagerButton,
   Loading,
 } from "./styles/Board.styles";
-import AnimalName from "../../components/AnimalName";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import RegDate from "../../components/RegDate";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -60,8 +58,7 @@ const BoardList = () => {
                 [{b.categoryName}] {b.boardTitle}
               </ItemTitle>
               <ItemMeta>
-                <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}
-                <RegDate regDate={b.regDate} />
+                {b.userId} • 조회수 : {b.boardCount} • {b.formattedRegDate}
               </ItemMeta>
             </Item>
           ))}

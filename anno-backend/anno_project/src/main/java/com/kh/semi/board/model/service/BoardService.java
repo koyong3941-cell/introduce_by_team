@@ -1,5 +1,8 @@
 package com.kh.semi.board.model.service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
@@ -62,7 +65,14 @@ public class BoardService {
 
 	public List<BoardDto> findAll(int page) {
 		RowBounds rb = new RowBounds(page * 10, 10);
-		return boardMapper.findAll(rb);
+		List<BoardDto> boardList = boardMapper.findAll(rb);
+		
+		for (BoardDto dto : boardList) {
+			dto.setUserId(makeAnimalNickname(dto.getRegDate()));
+			
+			dto.setFormattedRegDate(formatRegDate(dto.getRegDate()));
+		}
+		return boardList;
 	}
 	
 	@Transactional
@@ -78,10 +88,14 @@ public class BoardService {
 
 	private BoardDto getBoardNoOrThrow(Long boardNo) {
 		BoardDto boardDetail = boardMapper.findByNo(boardNo);
-
+		
 		if (boardDetail == null) {
 			throw new FailSaveException("유효하지 않은 접근입니다.");
 		}
+		
+		boardDetail.setUserId(makeAnimalNickname(boardDetail.getRegDate()));
+		
+		boardDetail.setFormattedRegDate(formatRegDate(boardDetail.getRegDate()));
 		return boardDetail;
 	}
 
@@ -127,4 +141,56 @@ public class BoardService {
 		return boardMapper.categoryInfo();
 	}
 
+	// 랜덤한 동물 이름으로 만들기
+	private String makeAnimalNickname(LocalDateTime regDate) {
+	    if (regDate == null) {
+	        return "익명";
+	    }
+
+	    // milliseconds 추출 (0 ~ 999)
+	    int millis = regDate.getNano() / 1_000_000;
+
+	    String[] traitFst = {
+	        "정신나간", "용감한", "무서운", "행복한", "건방진",
+	        "재빠른", "게으른", "신난", "시건방진", "괘씸한"
+	    };
+
+	    String[] traitSec = {
+	        "원숭이", "강아지", "황소", "개구리", "래트",
+	        "물범", "햄스터", "듀공", "돌고래", "기린"
+	    };
+
+	    int fstIndex = (millis / 100) % 10;
+	    int secIndex = millis % 10;
+
+	    return traitFst[fstIndex] + " " + traitSec[secIndex];
+	}
+	
+	// ===== 날짜 포맷팅 메서드 =====
+	private String formatRegDate(LocalDateTime regDate) {
+	    if (regDate == null) {
+	        return "";
+	    }
+
+	    LocalDateTime now = LocalDateTime.now();
+	    long daysBetween = ChronoUnit.DAYS.between(regDate.toLocalDate(), now.toLocalDate());
+
+	    DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	    DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM.dd HH:mm");
+	    DateTimeFormatter fullDateFormatter = DateTimeFormatter.ofPattern("yy.MM.dd HH:mm");
+
+	    if (daysBetween == 0) {
+	        // 오늘
+	        return regDate.format(timeFormatter);
+	    } else if (daysBetween == 1) {
+	        // 어제
+	        return "어제 " + regDate.format(timeFormatter);
+	    } else if (regDate.getYear() == now.getYear()) {
+	        // 올해
+	        return regDate.format(dateTimeFormatter);
+	    } else {
+	        // 다른 해
+	        return regDate.format(fullDateFormatter);
+	    }
+	}
 }

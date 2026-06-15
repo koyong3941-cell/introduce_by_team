@@ -22,8 +22,6 @@ import {
 } from "./styles/Board.styles";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import AnimalName from "../../components/AnimalName";
-import RegDate from "../../components/RegDate";
 
 const BoardDetail = () => {
   const navi = useNavigate();
@@ -95,15 +93,11 @@ const BoardDetail = () => {
         [{board.categoryName}] {board.boardTitle}
       </DetailTitle>
       <MetaRow>
-        <span>
-          <AnimalName regDate={board.regDate} />
-        </span>
+        <span>{board.userId}</span>
         <span>{" • "}</span>
         <span>조회수 : {board.boardCount}</span>
         <span>{" • "}</span>
-        <span>
-          <RegDate regDate={board.regDate} />
-        </span>
+        <span>{board.formattedRegDate}</span>
       </MetaRow>
 
       <Content>{board.boardContent}</Content>

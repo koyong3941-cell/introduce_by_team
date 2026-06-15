@@ -37,4 +37,7 @@ public class BoardDto {
     private LocalDateTime regDate; 
     private String categoryName;
     
+    // 앞단에서 보여주기용 RegDate
+    private String formattedRegDate;
+    
 }

@@ -89,7 +89,8 @@ const Board = () => {
         setCategory(String(data.categoryNo || data.category));
         setTitle(data.boardTitle);
         setContent(data.boardContent);
-        setId(data.userId);
+        setId("");
+        setPwd("");
       }
     });
   }, [boardNo, isEdit]);
