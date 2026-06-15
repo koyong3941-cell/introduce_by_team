@@ -112,7 +112,45 @@ public interface BoardMapper {
 				ANNO_CATEGORY
 				""")
 	List<Category> categoryInfo();
+
 	
+	// 어드민 조회, 삭제, 수정 기능
+	
+	@Select("""
+			SELECT
+				BOARD_NO 
+				,BOARD_TITLE 
+				,BOARD_CONTENT 
+				,BOARD_COUNT 
+				,CATEGORY_NO
+				,REG_DATE
+				,C.CATEGORY_NAME
+			FROM
+				ANNO_BOARD
+			JOIN
+				ANNO_CATEGORY C USING(CATEGORY_NO)
+			ORDER
+			BY
+				REG_DATE DESC
+		 """)
+	List<BoardDto> findAllByAdmin(RowBounds rb);
+	
+	@Update("""
+			UPDATE			
+				ANNO_BOARD
+			SET
+				 BOARD_TITLE	= #{board.boardTitle}
+				,BOARD_CONTENT	= #{board.boardContent}
+				,CATEGORY_NO	= #{board.categoryNo}
+			WHERE
+				BOARD_NO = #{boardNo}
+			""")
+	void editByAdmin(@Param("board")BoardDto board, @Param("boardNo")Long boardNo);
+
+	@Update("UPDATE ANNO_BOARD SET DEL_YN = 'Y' WHERE BOARD_NO = #{boardNo}")
+	void deleteByAdmin(@Param("board")BoardDto board, @Param("boardNo")Long boardNo);
+	
+	// 요구사항
 	// BOARD_TITLE, BOARD_CONTENT, USER_ID, USER_PWD, CATEGORY_NO 게시판 작성
 	// BOARD_NO, BOARD_TITLE, BOARD_COUNT, 랜덤한 아이디값, REG_DATE, DEL_YN 게시판 목록 조회
 	// BOARD_NO, BOARD_TITLE, BOARD_COUNT, 랜덤한 아이디값, REG_DATE, BOARD_CONTENT, DEL_YN 게시판 상세조회

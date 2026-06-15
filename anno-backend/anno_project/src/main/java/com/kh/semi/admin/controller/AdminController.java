@@ -18,20 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/admin")
+@RequestMapping("/api/admins")
 public class AdminController {
 	private final AdminService adminService;
 	
 	@PostMapping
 	public ResponseEntity<ApiResponse<Void>> amdinSignUp(@RequestBody @Valid AdminDto admin){
-		
 		adminService.adminSignUp(admin);
 			
 		return ResponseEntity.status(201).body(ApiResponse.success(null));
 	}
-	
-
-
-
 	
 }

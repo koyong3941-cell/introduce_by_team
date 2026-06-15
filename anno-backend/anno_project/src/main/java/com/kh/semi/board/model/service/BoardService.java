@@ -6,6 +6,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,7 +70,6 @@ public class BoardService {
 		
 		for (BoardDto dto : boardList) {
 			dto.setUserId(makeAnimalNickname(dto.getRegDate()));
-			
 			dto.setFormattedRegDate(formatRegDate(dto.getRegDate()));
 		}
 		return boardList;
@@ -192,5 +192,34 @@ public class BoardService {
 	        // 다른 해
 	        return regDate.format(fullDateFormatter);
 	    }
+	}
+	
+	// Admin 전용 서비스 단
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional
+	public List<BoardDto> findAllByAdmin(int page) {
+		RowBounds rb = new RowBounds(page * 10, 10);
+		List<BoardDto> boardList = boardMapper.findAllByAdmin(rb);
+		
+		for (BoardDto dto : boardList) {
+			dto.setUserId(makeAnimalNickname(dto.getRegDate()));
+			dto.setFormattedRegDate(formatRegDate(dto.getRegDate()));
+		}
+		return boardList;
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional
+	public void editByAdmin(BoardDto board, Long boardNo) {
+
+		boardMapper.editByAdmin(board, boardNo);
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Transactional
+	public void deleteByAdmin(BoardDto board, Long boardNo) {
+
+		boardMapper.deleteByAdmin(board, boardNo);
 	}
 }

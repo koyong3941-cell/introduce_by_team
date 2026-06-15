@@ -3,7 +3,8 @@ package com.kh.semi.board.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -26,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards") 
-@CrossOrigin("*")
+// @CrossOrigin("*")
 public class BoardController {
 	private final BoardService boardService;
 	
@@ -68,4 +69,41 @@ public class BoardController {
 		List<Category> categoryLists = boardService.categoryInfo();
 		return ResponseEntity.ok(ApiResponse.success(categoryLists)); 
 	}
+	
+	// admin 컨트롤 단
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@GetMapping("/admin")
+	public ResponseEntity<ApiResponse<List<BoardDto>>> findAllByAdmin(@RequestParam(value = "page", defaultValue ="0") int page
+			,Authentication auth){
+		
+		List<BoardDto> boardLists;
+		
+		boolean isAdmin = (auth != null && auth.getAuthorities().stream().anyMatch(a ->
+		a.getAuthority().equals("ROLE_ADMIN")));
+		
+		if(isAdmin){
+	        boardLists = boardService.findAllByAdmin(page);
+	    } else {
+	        boardLists = boardService.findAll(page);
+	    }
+		return ResponseEntity.ok(ApiResponse.success(boardLists));
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@DeleteMapping("/admin/{boardNo}")
+	public ResponseEntity<Void> deleteByAdmin(@RequestBody BoardDto board, @PathVariable(name = "boardNo") Long BoardNo) {
+		boardService.deleteByAdmin(board, BoardNo);
+		
+		return ResponseEntity.ok().build();
+	}
+	
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@PatchMapping("/admin/{boardNo}")
+	public ResponseEntity<Void> editByAdmin(@ModelAttribute @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
+		boardService.editByAdmin(board, BoardNo);
+		
+		return ResponseEntity.noContent().build();
+	}
+	
 }

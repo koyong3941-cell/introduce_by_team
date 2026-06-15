@@ -1,5 +1,7 @@
 package com.kh.semi.configuration;
 
+import java.util.Arrays;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -13,6 +15,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,7 +35,8 @@ public class SecurityConfiguration {
 					requests.requestMatchers(HttpMethod.PATCH, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.DELETE, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.GET, "/api/boards").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll();
+					requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll()
+					.anyRequest().authenticated();
 					
 				}).sessionManagement(manager ->
 				manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -48,6 +54,18 @@ public class SecurityConfiguration {
         return new BCryptPasswordEncoder();
     }
 	
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173"));
+		configuration.setAllowedMethods(Arrays.asList("POST", "PATCH", "DELETE", "GET","PUT","OPTIONS"));
+		configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
+		configuration.setAllowCredentials(true);
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		
+		return source;
+	}
 	
 	
 	
