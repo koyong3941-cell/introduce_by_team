@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import axios from "axios";
 import {
   Button,
   Card,
@@ -13,8 +12,10 @@ import {
   Sub,
   Title,
 } from "../styles/AuthForm.styles";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const [memberId, setMemberId] = useState("");
   const [memberPwd, setMemberPwd] = useState("");
   const [status, setStatus] = useState("");
@@ -39,8 +40,9 @@ const Login = () => {
         userId,
         userPwd,
       });
-      console.log(result.data);
+      // console.log(result.data);
 
+      login(result.data);
       alert("로그인 성공!");
 
       navi("/");

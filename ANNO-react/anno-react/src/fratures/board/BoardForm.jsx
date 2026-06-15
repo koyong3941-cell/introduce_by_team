@@ -15,7 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import api from "../../api/axios";
 
-const Board = () => {
+const BoardForm = () => {
   const navi = useNavigate();
   const { boardNo } = useParams();
   const isEdit = boardNo != null;
@@ -171,4 +171,4 @@ const Board = () => {
     </Page>
   );
 };
-export default Board;
+export default BoardForm;
