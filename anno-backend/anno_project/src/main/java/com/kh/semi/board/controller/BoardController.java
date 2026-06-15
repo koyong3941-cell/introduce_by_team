@@ -72,23 +72,12 @@ public class BoardController {
 	}
 	
 	// admin 컨트롤 단
-	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping("/admin")
 	public ResponseEntity<ApiResponse<List<BoardDto>>> findAllByAdmin(@RequestParam(value = "page", defaultValue ="0") int page
 			,Authentication auth){
-		
-		List<BoardDto> boardLists;
-		
-		boolean isAdmin = (auth != null && auth.getAuthorities().stream().anyMatch(a ->
-		a.getAuthority().equals("ROLE_ADMIN")));
-		
-		if(isAdmin){
-	        boardLists = boardService.findAllByAdmin(page);
-	    } else {
-	        boardLists = boardService.findAll(page);
-	    }
-		return ResponseEntity.ok(ApiResponse.success(boardLists));
+		List<BoardDto> boardLists = boardService.findAllByAdmin(page);
+	    return ResponseEntity.ok(ApiResponse.success(boardLists));
 	}
 	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
