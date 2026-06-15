@@ -39,15 +39,12 @@ public class AuthService {
 		}
 
 		//인증 성공함
-		
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
-
 		// 토큰 발급
 		
 			Jwts.builder().subject(user.getUsername()).issuedAt(new Date()).expiration(new Date()).compact();
 			Map<String, String> tokens = tokenService.getTokens(user);
-			return LoginResponse.builder().memberId(user.getUsername())
-													.memberName(user.getMemberName())
+			return LoginResponse.builder().adminId(user.getUsername())
 													.role(user.getAuthorities().toString())
 													.accessToken(tokens.get("accessToken"))
 													.refreshToken(tokens.get("refreshToken"))

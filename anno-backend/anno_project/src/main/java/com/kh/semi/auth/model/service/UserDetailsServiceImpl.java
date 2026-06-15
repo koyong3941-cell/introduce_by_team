@@ -24,22 +24,19 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		//log.info("과연?? > {}", username);
-		// 여기선 우리가 무엇을 해야하는가?
 		
 		AdminDto admin = authMapper.loadUser(username);
 		 
 		log.info("조회된 정보 : {}", admin);
 		
 		if(admin == null) {
-			throw new UsernameNotFoundException("요거 있다구요잇");
+			throw new UsernameNotFoundException("유저 ID 조회 실패");
 		}
-		
 		
 		return CustomUserDetails.builder().username(admin.getAdminId())
 											.password(admin.getAdminPwd())
 											.authorities(Collections.singletonList(new SimpleGrantedAuthority(admin.getRole())))
-											.status(admin.getStatus())
+											.status(admin.getDelYn())
 											.build();
 	}
 
