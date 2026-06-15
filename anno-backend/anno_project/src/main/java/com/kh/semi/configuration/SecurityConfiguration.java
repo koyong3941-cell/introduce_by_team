@@ -31,12 +31,16 @@ public class SecurityConfiguration {
 		return http.formLogin(AbstractHttpConfigurer::disable)
 				.csrf(AbstractHttpConfigurer::disable)	
 				.cors(Customizer.withDefaults()).authorizeRequests(requests ->{
+					requests.requestMatchers("/api/boards/admin/**").hasRole("ADMIN");
 					requests.requestMatchers(HttpMethod.POST, "/api/boards").permitAll();
 					requests.requestMatchers(HttpMethod.PATCH, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.DELETE, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.GET, "/api/boards").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll()
-					.anyRequest().authenticated();
+					requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll();
+					requests.requestMatchers(HttpMethod.GET, "/api/admins/**").permitAll();
+					requests.requestMatchers(HttpMethod.POST, "/api/admins/**").permitAll();
+					requests.requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll();
+					requests.anyRequest().authenticated();
 					
 				}).sessionManagement(manager ->
 				manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
