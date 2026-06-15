@@ -85,8 +85,10 @@ const BoardForm = () => {
     if (!isEdit) return;
     api.get(`/boards/${boardNo}`).then((result) => {
       const data = result.data?.data || result.data;
+      console.log(categories);
+
       if (data) {
-        setCategory(String(data.categoryNo || data.category));
+        setCategory("");
         setTitle(data.boardTitle);
         setContent(data.boardContent);
         setId("");
@@ -102,13 +104,6 @@ const BoardForm = () => {
       </TopBar>
       <Field>
         <Label>카테고리</Label>
-        {/*        
-        <Input
-          placeholder="카테고리 번호"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
-         */}
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}

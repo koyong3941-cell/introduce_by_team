@@ -49,19 +49,7 @@ public class BoardService {
 			throw new FailSaveException("제목은 필수입니다.");
 		}
 	}
-	/*
-	// 동물 난수값을 바탕으로 동물 이름 생성 *미사용 코드 앞단 js로 빼야함
-	private String getAnimalTrait(BoardDto board) {
-		final String[] traitFst = { "정신나간", "용감한", "무서운", "행복한", "건방진", "재빠른", "게으른", "신난", "시건방진", "괘씸한" };
-		final String[] traitSec = { "원숭이", "강아지", "황소", "개구리", "래트", "물범", "햄스터", "듀공", "돌고래", "기린" };
-		// 1. LocalDateTime에서 밀리초(0~999) 추출
-		long millis = board.getRegDate().getNano() / 1_000_000;
-		// 2. 0~999를 0~9 범위로 변환
-		int fstIndex = (int) (millis / 100) % 10; // 앞자리 (0~9)
-		int secIndex = (int) (millis % 10); // 뒷자리 (0~9)
-
-		return traitFst[fstIndex] + " " + traitSec[secIndex];
-	} */
+	
 
 	public List<BoardDto> findAll(int page) {
 		RowBounds rb = new RowBounds(page * 10, 10);
@@ -165,6 +153,19 @@ public class BoardService {
 
 	    return traitFst[fstIndex] + " " + traitSec[secIndex];
 	}
+	/*
+	// 동물 난수값을 바탕으로 동물 이름 생성 *미사용 코드 앞단 js로 빼야함
+	private String getAnimalTrait(BoardDto board) {
+		final String[] traitFst = { "정신나간", "용감한", "무서운", "행복한", "건방진", "재빠른", "게으른", "신난", "시건방진", "괘씸한" };
+		final String[] traitSec = { "원숭이", "강아지", "황소", "개구리", "래트", "물범", "햄스터", "듀공", "돌고래", "기린" };
+		// 1. LocalDateTime에서 밀리초(0~999) 추출
+		long millis = board.getRegDate().getNano() / 1_000_000;
+		// 2. 0~999를 0~9 범위로 변환
+		int fstIndex = (int) (millis / 100) % 10; // 앞자리 (0~9)
+		int secIndex = (int) (millis % 10); // 뒷자리 (0~9)
+
+		return traitFst[fstIndex] + " " + traitSec[secIndex];
+	} */
 	
 	// ===== 날짜 포맷팅 메서드 =====
 	private String formatRegDate(LocalDateTime regDate) {
