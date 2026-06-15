@@ -23,6 +23,7 @@ import {
 import { useState, useEffect } from "react";
 import axios from "axios";
 import AnimalName from "../../components/AnimalName";
+import RegDate from "../../components/RegDate";
 
 const BoardDetail = () => {
   const navi = useNavigate();
@@ -82,7 +83,9 @@ const BoardDetail = () => {
         <span>{" • "}</span>
         <span>조회수 : {board.boardCount}</span>
         <span>{" • "}</span>
-        <span>{board.regDate}</span>
+        <span>
+          <RegDate regDate={board.regDate} />
+        </span>
       </MetaRow>
 
       <Content>{board.boardContent}</Content>

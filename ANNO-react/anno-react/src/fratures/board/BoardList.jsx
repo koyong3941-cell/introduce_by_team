@@ -16,6 +16,7 @@ import {
 import AnimalName from "../../components/AnimalName";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import RegDate from "../../components/RegDate";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
@@ -60,7 +61,7 @@ const BoardList = () => {
               </ItemTitle>
               <ItemMeta>
                 <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}
-                {b.regDate}
+                <RegDate regDate={b.regDate} />
               </ItemMeta>
             </Item>
           ))}
