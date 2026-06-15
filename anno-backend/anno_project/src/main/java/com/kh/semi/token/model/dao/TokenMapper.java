@@ -10,12 +10,12 @@ import com.kh.semi.token.model.vo.RefreshToken;
 @Mapper
 public interface TokenMapper {
 
-	@Insert("INSERT INTO SEMI_TOKEN VALUES (#{memberId}, #{token}, #{expiration})")
+	@Insert("INSERT INTO ANNO_TOKEN VALUES (#{adminId}, #{token}, #{expiration})")
 	void saveToken(RefreshToken token);
 	
-	@Delete("DELETE FROM SEMI_TOKEN WHERE MEMBER_ID = #{memberId}")
-	void deleteToken(String memberId);
+	@Delete("DELETE FROM ANNO_TOKEN WHERE ADMIN_ID = #{adminId}")
+	void deleteToken(String adminId);
 	
-	@Select("SELECT MEMBER_ID, TOKEN, EXPIRATION FROM SEMI_MEMBER WHERE TOKEN = #{token}")
+	@Select("SELECT ADMIN_ID, TOKEN, EXPIRATION FROM ANNO_TOKEN WHERE TOKEN = #{token}")
 	RefreshToken findByToken(String token);
 }

@@ -6,7 +6,7 @@ import lombok.Value;
 @Value
 @Builder
 public class RefreshToken {
-	private String memberId;
+	private String adminId;
 	private String token;
 	private Long expiration;
 	

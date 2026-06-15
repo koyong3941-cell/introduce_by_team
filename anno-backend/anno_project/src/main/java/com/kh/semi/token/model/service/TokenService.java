@@ -35,9 +35,9 @@ public class TokenService {
 	}
 	
 	// 리프레시토큰을 받아서 DB에 INSERT 메소드
-	private void saveToken(String token, String memberId) {
+	private void saveToken(String token, String adminId) {
 		RefreshToken refreshToken = RefreshToken.builder()
-										.memberId(memberId)
+										.adminId(adminId)
 										.token(token)
 										.expiration(System.currentTimeMillis()+ (1000*60*60*24*3))
 										.build();
@@ -50,7 +50,7 @@ public class TokenService {
 	// 추후 AccessToken이 만료기간이 지나서 토큰 갱신 요청이 들어왔을때
 	// 사용자에게 전달받은 RefreshToken이 DB에 존재하면서 만료기간이 지나지 않았는지 검증
 	
-	public Map<String, String> tokenRotation(String refreshToken){
+	public Map<String, String> tokenLocation(String refreshToken){
 		RefreshToken token = tokenMapper.findByToken(refreshToken);
 		if(token == null || token.getExpiration() < System.currentTimeMillis()) {
 			throw new CustomAuthenticationException("유효하지 않은 토큰입니다.");

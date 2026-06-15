@@ -28,12 +28,16 @@ public class BoardDto {
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "영문자와 숫자만 입력 가능합니다.")
     private String userId;
     @NotBlank
-    @Size(min = 8, max = 20, message = "비밀번호는 8자 이상 20자 이하로 설정하세요.")
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$", 
+    @Size(min = 4, max = 20, message = "비밀번호는 4자 이상 20자 이하로 설정하세요.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{4,20}$", 
              message = "비밀번호는 영문, 숫자, 특수문자를 포함해야 합니다.")
     private String userPwd;
     private int categoryNo;
     private String delYn;
     private LocalDateTime regDate; 
+    private String categoryName;
+    
+    // 앞단에서 보여주기용 RegDate
+    private String formattedRegDate;
     
 }

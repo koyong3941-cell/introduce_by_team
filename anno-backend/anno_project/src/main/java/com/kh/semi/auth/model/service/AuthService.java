@@ -33,7 +33,7 @@ public class AuthService {
 
 		try {
 			auth = authenticationManager
-					.authenticate(new UsernamePasswordAuthenticationToken(lrd.getMemberId(), lrd.getMemberPwd()));
+					.authenticate(new UsernamePasswordAuthenticationToken(lrd.getAdminId(), lrd.getAdminPwd()));
 		} catch (AuthenticationException e) {
 			throw new CustomAuthenticationException("아이디 또는 비밀번호가 이상합니다");
 		}
@@ -42,7 +42,6 @@ public class AuthService {
 		CustomUserDetails user = (CustomUserDetails) auth.getPrincipal();
 		// 토큰 발급
 		
-			Jwts.builder().subject(user.getUsername()).issuedAt(new Date()).expiration(new Date()).compact();
 			Map<String, String> tokens = tokenService.getTokens(user);
 			return LoginResponse.builder().adminId(user.getUsername())
 													.role(user.getAuthorities().toString())

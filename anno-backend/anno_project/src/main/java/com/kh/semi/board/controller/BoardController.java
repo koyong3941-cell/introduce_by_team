@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/boards")
+@RequestMapping("/api/boards") 
 @CrossOrigin("*")
 public class BoardController {
 	private final BoardService boardService;
@@ -57,7 +57,7 @@ public class BoardController {
 	}
 	
 	@PatchMapping("/{boardNo}")
-	public ResponseEntity<Void> editByNo(@RequestBody @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
+	public ResponseEntity<Void> editByNo(@ModelAttribute @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
 		boardService.editByNo(board, BoardNo);
 		
 		return ResponseEntity.noContent().build();
