@@ -59,7 +59,7 @@ const Board = () => {
     setStatus("");
 
     const fd = new FormData();
-    fd.append("CategoryNo", category);
+    fd.append("categoryNo", category);
     fd.append("boardTitle", title);
     fd.append("boardContent", content);
     fd.append("userId", id);

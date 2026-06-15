@@ -51,6 +51,8 @@ public interface BoardMapper {
 					ANNO_BOARD
 				JOIN
 					ANNO_CATEGORY C USING(CATEGORY_NO)
+				WHERE
+					DEL_YN = 'N'
 				ORDER
 				BY
 					REG_DATE DESC
@@ -71,6 +73,8 @@ public interface BoardMapper {
 				ANNO_CATEGORY C USING(CATEGORY_NO)
 			WHERE
 				BOARD_NO = #{boardNo}
+			AND
+				DEL_YN = 'N'
 			""")
 	BoardDto findByNo(Long boardNo);
 	
@@ -78,21 +82,24 @@ public interface BoardMapper {
 			UPDATE			
 				ANNO_BOARD
 			SET
-				 BOARD_TITLE	= #{boardTitle}
-				,BOARD_CONTENT	= #{boardContent}
-				,CATEGORY_NO	=
+				 BOARD_TITLE	= #{board.boardTitle}
+				,BOARD_CONTENT	= #{board.boardContent}
+				,CATEGORY_NO	= #{board.categoryNo}
 			WHERE
 				BOARD_NO = #{boardNo}
 			""")
 	void editByNo(@Param("board")BoardDto board, @Param("boardNo")Long boardNo);
 
+	@Update("UPDATE ANNO_BOARD SET DEL_YN = 'Y' WHERE BOARD_NO = #{boardNo}")
 	void deleteByNo(Long boardNo);
 
-	@Select("SELECT EXISTS(SELECT 1 FROM ANNO_BOARD WHERE USER_ID = #{userId})")
+	@Select("""
+			SELECT CASE WHEN EXISTS(SELECT 1 FROM ANNO_BOARD WHERE USER_ID = #{userId}) THEN 1 ELSE 0 END AS EXISTS_YN FROM DUAL
+			""")
 	boolean existsByUserId(String userId);
 
-	@Select("SELECT USER_PWD FROM ANNO_BOARD WHERE USER_ID = #{userId}")
-	Board checkPwd(BoardDto inputBoard);
+	@Select("SELECT USER_PWD FROM ANNO_BOARD WHERE USER_ID = #{userId} AND BOARD_NO = #{boardNo}")
+	String checkPwd(BoardDto board);
 
 	@Update("UPDATE ANNO_BOARD SET BOARD_COUNT = BOARD_COUNT + 1 WHERE BOARD_NO = #{boardNo}")
 	void increaseCount(Long boardNo);

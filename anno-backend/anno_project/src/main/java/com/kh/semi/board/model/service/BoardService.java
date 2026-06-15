@@ -16,7 +16,9 @@ import com.kh.semi.exception.FailSaveException;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -113,8 +115,9 @@ public class BoardService {
 	}
 	// ------ 유저 Pwd 검증 ----
 	private void validatePwd(BoardDto inputBoard) {
-		Board savedPwd = boardMapper.checkPwd(inputBoard);
-		if (savedPwd == null || !passwordEncoder.matches(inputBoard.getUserPwd(), savedPwd.getUserPwd())) {
+		log.info(inputBoard.getUserId());
+		String savedPwd = boardMapper.checkPwd(inputBoard);
+		if (savedPwd == null || !passwordEncoder.matches(inputBoard.getUserPwd(), savedPwd)) {
 			throw new CustomAuthenticationException("비밀번호가 일치하지 않습니다.");
 		}
 	}

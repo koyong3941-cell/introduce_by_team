@@ -49,8 +49,26 @@ const BoardDetail = () => {
   const onDelete = async () => {
     if (!confirm("정말 삭제하시겠어요?")) return;
 
+    const inputUserId = prompt("작성자명을 입력하세요:");
+    if (!inputUserId) {
+      alert("작성자명을 입력해야 삭제할 수 있습니다.");
+      return;
+    }
+
+    const inputPwd = prompt("비밀번호를 입력하세요:");
+    if (!inputPwd) {
+      alert("비밀번호를 입력해야 삭제할 수 있습니다.");
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost/api/boards/${boardNo}`);
+      await axios.delete(`http://localhost/api/boards/${boardNo}`, {
+        data: {
+          boardNo: boardNo,
+          userId: inputUserId,
+          userPwd: inputPwd,
+        },
+      });
       navi("/boards");
     } catch {
       alert("삭제에 실패했습니다.");
