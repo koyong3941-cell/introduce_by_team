@@ -8,6 +8,7 @@ import Footer from "./footer/Footer";
 import Board from "./board/Board";
 import { Route, Routes } from "react-router-dom";
 import Login from "./login/Login";
+import Home from "./home/home";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/board" element={<Board />} />
+        <Route path="/" element={<Home />} />
       </Routes>
       <Footer />
     </>
