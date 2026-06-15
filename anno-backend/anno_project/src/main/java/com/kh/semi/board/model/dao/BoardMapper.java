@@ -51,6 +51,9 @@ public interface BoardMapper {
 					ANNO_BOARD
 				JOIN
 					ANNO_CATEGORY C USING(CATEGORY_NO)
+				ORDER
+				BY
+					REG_DATE DESC
 			 """)
 	List<BoardDto> findAll(RowBounds rb);
 
