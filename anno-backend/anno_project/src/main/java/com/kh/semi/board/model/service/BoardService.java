@@ -72,6 +72,7 @@ public class BoardService {
 			dto.setUserId(makeAnimalNickname(dto.getRegDate()));
 			dto.setFormattedRegDate(formatRegDate(dto.getRegDate()));
 		}
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{}", boardList);
 		return boardList;
 	}
 	
@@ -102,20 +103,20 @@ public class BoardService {
 	@Transactional
 	public void deleteByNo(BoardDto board, Long boardNo) {
 		// 비회원 검증 보드넘으로 아이디 뽑고, 현재 vo에서 확인
-		UnitedValidate(board, boardNo);
+		unitedValidate(board, boardNo);
 		boardMapper.deleteByNo(boardNo);
 	}
 
 	@Transactional
 	public void editByNo(@Valid BoardDto board, Long boardNo) {
 		// 비회원 검증 보드넘으로 아이디 뽑고, 현재 vo에서 확인
-		UnitedValidate(board, boardNo);
+		unitedValidate(board, boardNo);
 		boardMapper.editByNo(board, boardNo);
 	}
 	
 	// ----- 공통 유효성 검사 코드 ------
 
-	public void UnitedValidate(@Valid BoardDto board, Long boardNo) {
+	public void unitedValidate(@Valid BoardDto board, Long boardNo) {
 		// 비회원 검증 보드넘으로 아이디 뽑고, 현재 vo에서 확인
 		validateUser(board.getUserId());
 		validatePwd(board);
@@ -194,32 +195,4 @@ public class BoardService {
 	    }
 	}
 	
-	// Admin 전용 서비스 단
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional
-	public List<BoardDto> findAllByAdmin(int page) {
-		RowBounds rb = new RowBounds(page * 10, 10);
-		List<BoardDto> boardList = boardMapper.findAllByAdmin(rb);
-		
-		for (BoardDto dto : boardList) {
-			dto.setUserId(makeAnimalNickname(dto.getRegDate()));
-			dto.setFormattedRegDate(formatRegDate(dto.getRegDate()));
-		}
-		return boardList;
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional
-	public void editByAdmin(BoardDto board, Long boardNo) {
-
-		boardMapper.editByAdmin(board, boardNo);
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@Transactional
-	public void deleteByAdmin(BoardDto board, Long boardNo) {
-
-		boardMapper.deleteByAdmin(board, boardNo);
-	}
 }

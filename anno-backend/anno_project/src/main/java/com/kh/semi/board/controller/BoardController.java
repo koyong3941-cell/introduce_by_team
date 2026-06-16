@@ -24,11 +24,13 @@ import com.kh.semi.common.api.ApiResponse;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/boards") 
-@CrossOrigin("*")
+// @CrossOrigin("*")
 public class BoardController {
 	private final BoardService boardService;
 	
@@ -41,6 +43,8 @@ public class BoardController {
 	@GetMapping
 	public ResponseEntity<ApiResponse<List<BoardDto>>> findAll(@RequestParam(value = "page", defaultValue ="0") int page){
 		List<BoardDto> boardLists = boardService.findAll(page);
+		log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@{}", boardLists);
+
 		return ResponseEntity.ok(ApiResponse.success(boardLists));
 	}
 	
@@ -71,29 +75,6 @@ public class BoardController {
 		return ResponseEntity.ok(ApiResponse.success(categoryLists)); 
 	}
 	
-	// admin 컨트롤 단
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@GetMapping("/admin")
-	public ResponseEntity<ApiResponse<List<BoardDto>>> findAllByAdmin(@RequestParam(value = "page", defaultValue ="0") int page
-			,Authentication auth){
-		List<BoardDto> boardLists = boardService.findAllByAdmin(page);
-	    return ResponseEntity.ok(ApiResponse.success(boardLists));
-	}
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@DeleteMapping("/admin/{boardNo}")
-	public ResponseEntity<Void> deleteByAdmin(@RequestBody BoardDto board, @PathVariable(name = "boardNo") Long BoardNo) {
-		boardService.deleteByAdmin(board, BoardNo);
-		
-		return ResponseEntity.ok().build();
-	}
-	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	@PatchMapping("/admin/{boardNo}")
-	public ResponseEntity<Void> editByAdmin(@ModelAttribute @Valid BoardDto board,@PathVariable(name = "boardNo")Long BoardNo) {
-		boardService.editByAdmin(board, BoardNo);
-		
-		return ResponseEntity.noContent().build();
-	}
 	
 }

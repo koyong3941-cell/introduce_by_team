@@ -53,7 +53,9 @@ public class JwtFilter extends OncePerRequestFilter {
 			Claims claims = jwtUtil.parseJwt(token);
 			String username = claims.getSubject();
 			CustomUserDetails user = (CustomUserDetails)userDetailService.loadUserByUsername(username);
-
+			
+			log.info("로그인한 유저 권한 확인: {}", user.getAuthorities());
+			
 			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
 			authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 

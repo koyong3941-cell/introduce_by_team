@@ -50,8 +50,8 @@ export const Nav = styled.nav`
 export const NavLink = styled.a`
   padding: 8px 12px;
   font-size: 14px;
-  font-weight: 500;
-  color: ${theme.color.sub};
+  font-weight: 700;
+  color: white;
   text-decoration: none;
   border-radius: 8px;
   transition:

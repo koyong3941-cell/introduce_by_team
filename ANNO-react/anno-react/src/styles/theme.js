@@ -7,7 +7,7 @@ export const theme = {
     indigoDark: "#4338CA",
     indigoSoft: "#EEF2FF",
     text: "#18181B",
-    sub: "#4949cc",
+    sub: "#262020",
     border: "#E4E4E7",
     bg: "#ffffff",
     headerBg: "#1f80a7",

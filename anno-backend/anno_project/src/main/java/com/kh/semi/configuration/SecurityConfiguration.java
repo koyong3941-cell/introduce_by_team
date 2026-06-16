@@ -15,9 +15,12 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import com.kh.semi.configuration.filter.JwtFilter;
 
 import lombok.RequiredArgsConstructor;
 
@@ -25,25 +28,26 @@ import lombok.RequiredArgsConstructor;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration {
+	private final JwtFilter jwtFilter;
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
-	
+
 		return http.formLogin(AbstractHttpConfigurer::disable)
-				.csrf(AbstractHttpConfigurer::disable)	
+				.csrf(AbstractHttpConfigurer::disable)	// "/api/admins/boards/{boardNo}"
 				.cors(Customizer.withDefaults()).authorizeRequests(requests ->{
-					requests.requestMatchers("/api/boards/admin/**").hasRole("ADMIN");
+					
+					requests.requestMatchers("/api/admins/**").hasRole("ADMIN");
 					requests.requestMatchers(HttpMethod.POST, "/api/boards").permitAll();
 					requests.requestMatchers(HttpMethod.PATCH, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.DELETE, "/api/boards/**").permitAll();
 					requests.requestMatchers(HttpMethod.GET, "/api/boards").permitAll();
 					requests.requestMatchers(HttpMethod.GET, "/api/boards/**").permitAll();
-					requests.requestMatchers(HttpMethod.GET, "/api/admins/**").permitAll();
-					requests.requestMatchers(HttpMethod.POST, "/api/admins/**").permitAll();
 					requests.requestMatchers(HttpMethod.POST, "/api/auth/login/**").permitAll();
 					requests.anyRequest().authenticated();
 					
 				}).sessionManagement(manager ->
 				manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 		}
 

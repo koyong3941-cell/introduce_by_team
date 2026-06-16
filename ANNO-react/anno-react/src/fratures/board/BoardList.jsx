@@ -13,40 +13,65 @@ import {
   PagerButton,
   Loading,
 } from "./styles/Board.styles";
-import AnimalName from "../../components/AnimalName";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useAuth } from "../../context/AuthContext";
 
 const BoardList = () => {
   const [boards, setBoards] = useState([]);
-  const navi = useNavigate();
   const [page, setPage] = useState(0);
-  const [loading, isLoading] = useState(true);
+  const [loading, setLoading] = useState(true);
+
+  const navi = useNavigate();
+  const { user } = useAuth();
+
+  // 🔥 ADMIN 판별 (안전하게 기본 false 방지)
+  const isAdmin = user?.role === "ROLE_ADMIN";
+  console.log(user?.role === "ROLE_ADMIN");
 
   useEffect(() => {
-    isLoading(true);
+    const fetchBoards = async () => {
+      setLoading(true);
 
-    axios
-      .get("http://localhost/api/boards", { params: { page } })
-      .then((result) => {
+      const url = isAdmin
+        ? "http://localhost/api/admins/boards"
+        : "http://localhost/api/boards";
+
+      const token = localStorage.getItem("token");
+
+      try {
+        const result = await axios.get(url, {
+          params: { page },
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         console.log(result);
-        setBoards([...result.data.data]);
-        console.log("보드 업데이트 성공");
-      })
-      .catch(() => {
+        setBoards(result.data.data || []);
+      } catch (err) {
+        console.log(err.response);
         setBoards([]);
-      })
-      .finally(() => {
-        isLoading(false);
-      });
-  }, [page]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBoards();
+  }, [page, isAdmin]); // 🔥 isAdmin 변경 시 재호출
 
   return (
     <Page>
       <TopBar>
         <PageTitle>게시판</PageTitle>
-        <Button>글쓰기</Button>
+
+        {isAdmin && (
+          <div style={{ color: "red", fontSize: "12px" }}>
+            ADMIN MODE (삭제 포함 조회)
+          </div>
+        )}
+
+        <Button onClick={() => navi(`/boards/write`)}>글쓰기</Button>
       </TopBar>
+
       {loading ? (
         <Loading>게시글을 불러오는 중입니다...</Loading>
       ) : boards.length === 0 ? (
@@ -56,16 +81,22 @@ const BoardList = () => {
           {boards.map((b) => (
             <Item key={b.boardNo} onClick={() => navi(`/boards/${b.boardNo}`)}>
               <ItemTitle>
-                [{b.categoryNo}] {b.boardTitle}
+                [{b.categoryName}] {b.boardTitle}
               </ItemTitle>
+
               <ItemMeta>
-                <AnimalName regDate={b.regDate} /> • 조회수 : {b.boardCount} •{" "}
-                {b.regDate}
+                {b.userId} • 조회수 : {b.boardCount} • {b.formattedRegDate}
+                {isAdmin && (
+                  <span style={{ marginLeft: "8px", color: "red" }}>
+                    (DEL_YN: {b.delYn ?? "N"})
+                  </span>
+                )}
               </ItemMeta>
             </Item>
           ))}
         </List>
       )}
+
       <Pager>
         <PagerButton
           onClick={() => setPage((p) => Math.max(0, p - 1))}
@@ -73,7 +104,9 @@ const BoardList = () => {
         >
           이전
         </PagerButton>
+
         <span>{page + 1} 페이지</span>
+
         <PagerButton
           onClick={() => setPage((p) => p + 1)}
           disabled={loading || boards.length < 10}

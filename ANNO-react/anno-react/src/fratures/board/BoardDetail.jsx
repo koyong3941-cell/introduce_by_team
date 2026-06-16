@@ -22,13 +22,15 @@ import {
 } from "./styles/Board.styles";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import AnimalName from "../../components/AnimalName";
+import { useAuth } from "../../context/AuthContext";
 
 const BoardDetail = () => {
   const navi = useNavigate();
   const [board, setBoard] = useState(null);
   const [loading, isLoading] = useState(true);
   const { boardNo } = useParams();
+  const { user } = useAuth(); 
+  const isAdmin = user?.role === 'ROLE_ADMIN';
 
   useEffect(() => {
     isLoading(true);
@@ -48,8 +50,26 @@ const BoardDetail = () => {
   const onDelete = async () => {
     if (!confirm("정말 삭제하시겠어요?")) return;
 
+    const inputUserId = prompt("작성자명을 입력하세요:");
+    if (!inputUserId) {
+      alert("작성자명을 입력해야 삭제할 수 있습니다.");
+      return;
+    }
+
+    const inputPwd = prompt("비밀번호를 입력하세요:");
+    if (!inputPwd) {
+      alert("비밀번호를 입력해야 삭제할 수 있습니다.");
+      return;
+    }
+
     try {
-      await axios.delete(`http://localhost/api/boards/${boardNo}`);
+      await axios.delete(`http://localhost/api/boards/${boardNo}`, {
+        data: {
+          boardNo: boardNo,
+          userId: inputUserId,
+          userPwd: inputPwd,
+        },
+      });
       navi("/boards");
     } catch {
       alert("삭제에 실패했습니다.");
@@ -72,15 +92,15 @@ const BoardDetail = () => {
   }
   return (
     <Page>
-      <DetailTitle>[카테고리] {board.boardTitle}</DetailTitle>
+      <DetailTitle>
+        [{board.categoryName}] {board.boardTitle}
+      </DetailTitle>
       <MetaRow>
-        <span>
-          <AnimalName regDate={board.regDate} />
-        </span>
+        <span>{board.userId}</span>
         <span>{" • "}</span>
         <span>조회수 : {board.boardCount}</span>
         <span>{" • "}</span>
-        <span>{board.regDate}</span>
+        <span>{board.formattedRegDate}</span>
       </MetaRow>
 
       <Content>{board.boardContent}</Content>

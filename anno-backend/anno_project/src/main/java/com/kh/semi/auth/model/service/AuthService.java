@@ -44,7 +44,7 @@ public class AuthService {
 		
 			Map<String, String> tokens = tokenService.getTokens(user);
 			return LoginResponse.builder().adminId(user.getUsername())
-													.role(user.getAuthorities().toString())
+													.role(user.getAuthorities().iterator().next().getAuthority())
 													.accessToken(tokens.get("accessToken"))
 													.refreshToken(tokens.get("refreshToken"))
 													.build();
